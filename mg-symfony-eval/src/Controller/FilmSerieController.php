@@ -22,7 +22,7 @@ class FilmSerieController extends AbstractController
     {
         $entityManager = $doctrine->getManager();
         $data = json_decode($request->getContent(), true);
-        //$date = new \DateTime($data['date']);
+
         $fs = new Film();
         $fs->setNom($data['nom']);
         $fs->setSynopsis($data['synopsis']);
@@ -33,7 +33,6 @@ class FilmSerieController extends AbstractController
         $entityManager->flush();
 
         return new JsonResponse('status : 201, success');
-        //return $this->json($fs, Response::HTTP_OK);
 
     }
     
