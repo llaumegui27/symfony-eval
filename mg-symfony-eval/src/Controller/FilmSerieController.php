@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Film;
 use App\Form\FilmSerieType;
 use App\Repository\FilmRepository;
+use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,27 +16,19 @@ use Symfony\Component\Validator\Constraints\Date;
 
 class FilmSerieController extends AbstractController
 {
-    #[Route('/filmserie', name: 'app_film_serie')]
-    public function index(): Response
-    {
-        return $this->render('film_serie/index.html.twig', [
-            'controller_name' => 'FilmSerieController',
-        ]);
-    }
-
+    
     #[Route('/create', name: 'app_add', methods: ['POST'])]
     public function add(Request $request, ManagerRegistry $doctrine): JsonResponse      // Requete sur Postman
     {
         $entityManager = $doctrine->getManager();
         $data = json_decode($request->getContent(), true);
-
+        //$date = new \DateTime($data['date']);
         $fs = new Film();
         $fs->setNom($data['nom']);
         $fs->setSynopsis($data['synopsis']);
         $fs->setType($data['type']);
+        $fs->setDate(DateTime::createFromFormat('Y-m-d', $data['date']));
         
-        $fs->setDate($data['date']);
-
         $entityManager->persist($fs);
         $entityManager->flush();
 
